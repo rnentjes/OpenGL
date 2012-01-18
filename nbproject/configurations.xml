@@ -12,6 +12,9 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>glass.gif</itemPath>
+      <itemPath>nehe.gif</itemPath>
+      <itemPath>star.gif</itemPath>
       <itemPath>triangle.f.glsl</itemPath>
       <itemPath>triangle.v.glsl</itemPath>
     </logicalFolder>
@@ -44,7 +47,7 @@
       <compileType>
         <linkerTool>
           <linkerLibItems>
-            <linkerOptionItem>-lglut -lGLEW -lGL</linkerOptionItem>
+            <linkerOptionItem>-lglut -lGLEW -lGL -lfreeimage</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
