@@ -1,11 +1,7 @@
+#include "glass.h"
 /* GIMP RGBA C-Source image dump (glass.c) */
 
-static const struct {
-  guint  	 width;
-  guint  	 height;
-  guint  	 bytes_per_pixel; /* 3:RGB, 4:RGBA */ 
-  guint8 	 pixel_data[128 * 128 * 4 + 1];
-} gimp_image = {
+static const struct texture texture_glass = {
   128, 128, 4,
   "$\31\32\3777\30\31\3779$\32\377;\31\15\3777\30\31\377\34\32&\377)''\3776"
   "5*\377/4\37\37765*\37765*\37791\27\377)4'\37765*\37765*\37765*\37765*\377"
