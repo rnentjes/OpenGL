@@ -35,8 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/triangle.o \
-	${OBJECTDIR}/glass.o \
-	${OBJECTDIR}/shaderUtils.o
+	${OBJECTDIR}/shaderUtils.o \
+	${OBJECTDIR}/glass.o
 
 
 # C Compiler Flags
@@ -57,26 +57,26 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/c-opengl
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opengl
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/c-opengl: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opengl: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/c-opengl ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opengl ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/triangle.o: triangle.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/triangle.o triangle.c
 
-${OBJECTDIR}/glass.o: glass.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/glass.o glass.c
-
 ${OBJECTDIR}/shaderUtils.o: shaderUtils.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/shaderUtils.o shaderUtils.c
+
+${OBJECTDIR}/glass.o: glass.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/glass.o glass.c
 
 # Subprojects
 .build-subprojects:
@@ -84,7 +84,7 @@ ${OBJECTDIR}/shaderUtils.o: shaderUtils.c
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/c-opengl
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opengl
 
 # Subprojects
 .clean-subprojects:

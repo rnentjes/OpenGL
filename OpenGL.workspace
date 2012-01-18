@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Workspace Name="OpenGL" Database="./OpenGL.tags">
+  <Project Name="OpenGL" Path="OpenGL.project" Active="No"/>
+  <Project Name="OpenGLpp" Path="../OpenGL++/OpenGLpp.project" Active="Yes"/>
+  <Project Name="Tutorials" Path="../../Programming/Tutorial 0.3.7/Tutorials.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Project Name="OpenGL" ConfigName="Debug"/>
+      <Project Name="OpenGLpp" ConfigName="Debug"/>
+      <Project Name="Tutorials" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="OpenGL" ConfigName="Release"/>
+      <Project Name="OpenGLpp" ConfigName="Release"/>
+      <Project Name="Tutorials" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>
