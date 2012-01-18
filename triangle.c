@@ -21,22 +21,27 @@
 GLuint program;
 GLuint vbo_triangle;
 GLuint vbo_quad;
+GLuint vbo_quad_elements;
 GLuint vbo_cube_texcoords;
 GLuint texture_id;
+GLuint texture_id2;
+GLuint texture_id3;
 
 GLint attribute_coord2d;
 GLint uniform_fade;
-GLint attribute_texcoord;
 GLint uniform_mytexture;
+GLint uniform_location;
+GLint uniform_size;
 
 /* Global */
+static unsigned int program_start = 0;
 static unsigned int fps_start = 0;
 static unsigned int fps_frames = 0;
 
 int init_resources() {
     GLint compile_ok = GL_FALSE, link_ok = GL_FALSE;
 
-    fps_start = glutGet(GLUT_ELAPSED_TIME);
+    program_start = fps_start = glutGet(GLUT_ELAPSED_TIME);
 
     GLuint vs, fs;
     if ((vs = create_shader("triangle.v.glsl", GL_VERTEX_SHADER)) == 0) return 0;
@@ -55,20 +60,9 @@ int init_resources() {
     //glEnable(GL_TEXTURE_2D);
     //glEnable(GL_VERTEX_ARRAY);
     
-    glGenTextures(1, &texture_id);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, // target
-            0, // level, 0 = base, no minimap,
-            GL_RGB, // internalformat
-            texture_glass.width, // width
-            texture_glass.height, // height
-            0, // border, always 0 in OpenGL ES
-            GL_RGB, // format
-            GL_UNSIGNED_BYTE, // type
-            texture_glass.pixel_data);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+    texture_id = make_texture("glass.gif");
+    texture_id2 = make_texture("nehe.gif");
+    texture_id3 = make_texture("star.gif");
 
     GLfloat triangle_vertices[] = {
         0.0, 0.8,
@@ -76,51 +70,57 @@ int init_resources() {
         0.8, -0.8,
     };
 
-    glGenBuffers(1, &vbo_triangle);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
-    glBufferData(GL_ARRAY_BUFFER, sizeof (triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
+    vbo_triangle = make_buffer(GL_ARRAY_BUFFER, triangle_vertices, sizeof (triangle_vertices));
 
     GLfloat quad_vertices[] = {
-        -0.4, -0.4,
-        0.4, -0.4,
-        0.4, 0.4,
-        0.4, 0.4,
-        -0.4, 0.4,
-        -0.4, -0.4,
+        -0.2, -0.2,
+         0.2, -0.2,
+        -0.2,  0.2,
+         0.2,  0.2,
     };
 
-    glGenBuffers(1, &vbo_quad);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_quad);
-    glBufferData(GL_ARRAY_BUFFER, sizeof (quad_vertices), quad_vertices, GL_STATIC_DRAW);
+    vbo_quad = make_buffer(GL_ARRAY_BUFFER, quad_vertices, sizeof (quad_vertices));
+    
+    GLushort quad_elements[] = {
+        0, 1, 2, 3,
+    };
 
+    vbo_quad_elements = make_buffer(GL_ARRAY_BUFFER, quad_elements, sizeof (quad_elements));
+    
     /* init_resources */
     GLfloat cube_texcoords[] = {
         // front
         0.0, 0.0,
         1.0, 0.0,
         1.0, 1.0,
-        0.0, 1.0,
+        1.0, 1.0,
+        1.0, 0.0,
+        0.0, 0.0,
     };
-    
-    glGenBuffers(1, &vbo_cube_texcoords);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_texcoords);
-    glBufferData(GL_ARRAY_BUFFER, sizeof (cube_texcoords), cube_texcoords, GL_STATIC_DRAW);
 
+    vbo_cube_texcoords = make_buffer(GL_ARRAY_BUFFER, cube_texcoords, sizeof (cube_texcoords));
+    
     attribute_coord2d = glGetAttribLocation(program, "coord2d");
     if (attribute_coord2d == -1) {
         fprintf(stderr, "Could not bind attribute coord2d\n");
         return 0;
     }
 
-    attribute_texcoord = glGetAttribLocation(program, "texcoord");
-    if (attribute_texcoord == -1) {
-        fprintf(stderr, "Could not bind attribute texcoord\n");
+    uniform_mytexture = glGetUniformLocation(program, "mytexture");
+    if (uniform_mytexture == -1) {
+        fprintf(stderr, "Could not bind uniform mytexture\n");
         return 0;
     }
 
-    uniform_mytexture = glGetUniformLocation(program, "mytexture");
-    if (uniform_mytexture == -1) {
-        fprintf(stderr, "Could not bind attribute mytexture\n");
+    uniform_location = glGetUniformLocation(program, "location");
+    if (uniform_location == -1) {
+        fprintf(stderr, "Could not bind uniform location\n");
+        return 0;
+    }
+    
+    uniform_size = glGetUniformLocation(program, "size");
+    if (uniform_location == -1) {
+        fprintf(stderr, "Could not bind uniform size\n");
         return 0;
     }
 
@@ -150,13 +150,17 @@ void onDisplay() {
     glUseProgram(program);
 
     /* render */
-    glActiveTexture(GL_TEXTURE0 + texture_id);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_id);
-    glUniform1i(uniform_mytexture, texture_id);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_id2);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, texture_id3);
     
+    GLfloat r = (glutGet(GLUT_ELAPSED_TIME) - program_start) / 1000.0;
+
     //glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_texcoords);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_quad);
-    glEnableVertexAttribArray(attribute_coord2d);
     /* Describe our vertices array to OpenGL (it can't guess its format automatically) */
     glVertexAttribPointer(
             attribute_coord2d, // attribute
@@ -166,25 +170,34 @@ void onDisplay() {
             0, // no extra data between each position
             0 // offset of first element
             );
-
-    glEnableVertexAttribArray(attribute_texcoord);
-    /* Describe our vertices array to OpenGL (it can't guess its format automatically) */
-    glVertexAttribPointer(
-            attribute_texcoord, // attribute
-            2, // number of elements per vertex, here (x,y)
-            GL_FLOAT, // the type of each element
-            GL_FALSE, // take our values as-is
-            0, // no extra data between each position
-            0 // offset of first element
-            );
-    
+    //glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_texcoords);
+    glEnableVertexAttribArray(attribute_coord2d);
     
     /* Push each element in buffer_vertices to the vertex shader */
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    //glBindBuffer(GL_ARRAY_BUFFER, vbo_quad);
+    //glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_quad_elements);
+   
+    int i = 100;
+    for (; i < 500; i++) {
+      r = r * 0.999;
+      GLfloat factor =  (i/1000.0)*2.0;
+      glUniform2f(uniform_location, sin(r) * factor, cos(r) * factor);
+      glUniform2f(uniform_size, factor, factor);
+      glUniform1i(uniform_mytexture, i % 3);
 
-    glDisableVertexAttribArray(attribute_texcoord);
+      glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
+      
+      glUniform2f(uniform_location, -sin(r) * factor, -cos(r) * factor);
+      glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
+      glUniform2f(uniform_location, -sin(r) * factor, cos(r) * factor);
+      glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
+      glUniform2f(uniform_location, sin(r) * factor, -cos(r) * factor);
+      glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
+    }
+
     glDisableVertexAttribArray(attribute_coord2d);
-    glUseProgram(0);
+    //glUseProgram(0);
     
     /* Display the result */
     glutSwapBuffers();
@@ -226,7 +239,7 @@ int main(int argc, char** argv) {
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
+    glutInitWindowSize(1000, 800);
     glutCreateWindow("My First Triangle");
 
     GLenum glew_status = glewInit();

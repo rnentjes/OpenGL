@@ -15,6 +15,12 @@ extern "C" {
 char* file_read(const char* filename);
 void print_log(GLuint object);
 GLuint create_shader(const char* filename, GLenum type);
+GLuint make_buffer(
+    GLenum target,
+    const void *buffer_data,
+    GLsizei buffer_size
+);
+GLuint make_texture(const char *filename);
 
 #ifdef	__cplusplus
 }
