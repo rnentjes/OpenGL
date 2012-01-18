@@ -4,8 +4,10 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>glass.h</itemPath>
       <itemPath>location.h</itemPath>
       <itemPath>shaderUtils.h</itemPath>
+      <itemPath>texture.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -16,6 +18,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>glass.c</itemPath>
       <itemPath>shaderUtils.c</itemPath>
       <itemPath>triangle.c</itemPath>
     </logicalFolder>

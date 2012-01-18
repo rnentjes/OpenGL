@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/triangle.o \
+	${OBJECTDIR}/glass.o \
 	${OBJECTDIR}/shaderUtils.o
 
 
@@ -66,6 +67,11 @@ ${OBJECTDIR}/triangle.o: triangle.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/triangle.o triangle.c
+
+${OBJECTDIR}/glass.o: glass.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/glass.o glass.c
 
 ${OBJECTDIR}/shaderUtils.o: shaderUtils.c 
 	${MKDIR} -p ${OBJECTDIR}
