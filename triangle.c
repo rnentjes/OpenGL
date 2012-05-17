@@ -195,7 +195,26 @@ void onDisplay() {
       glUniform2f(uniform_location, sin(r) * factor, -cos(r) * factor);
       glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
     }
+    
+    glUniform2f(uniform_location, -0.5, -0.5);
+    glUniform2f(uniform_size, 0.7, 0.7);
+    glUniform1i(uniform_mytexture, 0);
 
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
+    
+    glUniform2f(uniform_location, -0.5, 0.0);
+    glUniform2f(uniform_size, 0.7, 0.7);
+    glUniform1i(uniform_mytexture, 1);
+
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
+
+    glUniform2f(uniform_location, -0.5, 0.5);
+    glUniform2f(uniform_size, 0.7, 0.7);
+    glUniform1i(uniform_mytexture, 2);
+
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
+    
+    
     glDisableVertexAttribArray(attribute_coord2d);
     //glUseProgram(0);
     
@@ -230,7 +249,7 @@ void idle() {
  * 
  */
 int main(int argc, char** argv) {
-    /*
+   /*
         if (!GLEW_VERSION_2_0) {
             fprintf(stderr, "Error: your graphic card does not support OpenGL 2.0\n");
             return 1;
@@ -251,6 +270,7 @@ int main(int argc, char** argv) {
     if (init_resources()) {
         glutDisplayFunc(onDisplay);
         glutIdleFunc(idle);
+        
         glutMainLoop();
     }
 

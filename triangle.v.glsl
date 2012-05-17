@@ -12,6 +12,6 @@ void main(void) {
   //gl_Position.x = (coord2d.x * size.x)+location.x;
   //gl_Position.y = (coord2d.y * size.y)+location.y;
 
-  texcoord = coord2d * vec2(2);
+  texcoord = coord2d * vec2(2.5) + vec2(0.5);
   //f_texcoord = texcoord * vec2(0.5) + vec2(0.5);
 }

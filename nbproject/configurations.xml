@@ -45,6 +45,11 @@
         <compilerSet>default</compilerSet>
       </toolsSet>
       <compileType>
+        <cTool>
+          <incDir>
+            <pElem>/usr/include/</pElem>
+          </incDir>
+        </cTool>
         <linkerTool>
           <linkerLibItems>
             <linkerOptionItem>-lglut -lGLEW -lGL -lfreeimage</linkerOptionItem>
