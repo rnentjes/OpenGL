@@ -179,6 +179,7 @@ void onDisplay() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_quad_elements);
    
     int i = 100;
+    
     for (; i < 500; i++) {
       r = r * 0.999;
       GLfloat factor =  (i/1000.0)*2.0;
@@ -197,19 +198,19 @@ void onDisplay() {
     }
     
     glUniform2f(uniform_location, -0.5, -0.5);
-    glUniform2f(uniform_size, 0.7, 0.7);
+    glUniform2f(uniform_size, sin(r) * 2.0, sin(r) * 2.0);
     glUniform1i(uniform_mytexture, 0);
 
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
     
     glUniform2f(uniform_location, -0.5, 0.0);
-    glUniform2f(uniform_size, 0.7, 0.7);
+    glUniform2f(uniform_size, cos(r) * 2.0, cos(r) * 2.0);
     glUniform1i(uniform_mytexture, 1);
 
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
 
     glUniform2f(uniform_location, -0.5, 0.5);
-    glUniform2f(uniform_size, 0.7, 0.7);
+    glUniform2f(uniform_size, sin(r) * 2.0, cos(r) * 2.0);
     glUniform1i(uniform_mytexture, 2);
 
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
